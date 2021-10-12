@@ -18,7 +18,7 @@ export HolderWB_IID=$(curl -s -H "Content-Type: application/json" -X POST -d '{"
 export CheckerW_IID=$(curl -s -H "Content-Type: application/json" -X POST -d '{"caID": "CheckerContract", "caWallet":{"getWalletId": '$CheckerW'}}' http://localhost:9080/api/contract/activate | jq .unContractInstanceId | tr -d '"')
 printf "\nThere are four wallets. 1 NFT Issuer, 2 NFT holders and 1 NFT Checker\n"
 printf "\nThere are 2 categories of NFTs minted in this example - GOLD and SILVER\n"
-printf "\nHolder A gets 'GOLD' nft and Holder B gets 'SILVER' nft from the Issuer\n"
+printf "\nHolder A gets 'GOLD' & 'ROSE GOLD' nft and Holder B gets 'SILVER' & 'PLATINUM' nft from the Issuer\n"
 
 sleep 2
 printf "\n1. Log the currency symbol for reference.\n"
@@ -33,8 +33,12 @@ read -n1 -r -p "Press any key to continue..." key
 printf "\n"
 curl -H "Content-Type: application/json" -X POST -d '{"tn":"GOLD", "destW":{"getWalletId": '$HolderWA'}}' http://localhost:9080/api/contract/instance/$IssuerW_IID/endpoint/mint
 sleep 2
+curl -H "Content-Type: application/json" -X POST -d '{"tn":"ROSE GOLD", "destW":{"getWalletId": '$HolderWA'}}' http://localhost:9080/api/contract/instance/$IssuerW_IID/endpoint/mint
+sleep 2
 curl -H "Content-Type: application/json" -X POST -d '{"tn":"SILVER", "destW":{"getWalletId": '$HolderWB'}}' http://localhost:9080/api/contract/instance/$IssuerW_IID/endpoint/mint
-sleep 1
+sleep 2
+curl -H "Content-Type: application/json" -X POST -d '{"tn":"PLATINUM", "destW":{"getWalletId": '$HolderWB'}}' http://localhost:9080/api/contract/instance/$IssuerW_IID/endpoint/mint
+
 
 printf "\n3. Checker wallet now tries to find GOLD NFT in both wallets. You'll see in pab server logs that NFT is found inside wallet A only.\n"
 read -n1 -r -p "Press any key to continue..." key
